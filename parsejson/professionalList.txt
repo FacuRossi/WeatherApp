@@ -1,0 +1,10 @@
+[{"name":"Elliot Kiss", "position":"Accountant", "scoring":20396.2, "initialPosition":4, "finalPosition":1}
+, {"name":"Marline Hickson", "position":"Civil Engineer", "scoring":16776.1, "initialPosition":1, "finalPosition":2}
+, {"name":"Wilda Cort", "position":"Computer Engineer", "scoring":20293.504, "initialPosition":8, "finalPosition":3}
+, {"name":"Jackson Stansel", "position":"Computer Engineer", "scoring":20435.184, "initialPosition":7, "finalPosition":4}
+, {"name":"Deandre Dehoyos", "position":"Computer Engineer", "scoring":21259.391999999996, "initialPosition":5, "finalPosition":5}
+, {"name":"Bruce Callas", "position":"Industrial Engineer", "scoring":13802.8, "initialPosition":3, "finalPosition":6}
+, {"name":"Carl Mick", "position":"Lawyer", "scoring":11265.0, "initialPosition":9, "finalPosition":7}
+, {"name":"Syreeta Halbrook", "position":"Lawyer", "scoring":18920.0, "initialPosition":2, "finalPosition":8}
+, {"name":"Carlton Madlock", "position":"Lawyer", "scoring":19030.0, "initialPosition":6, "finalPosition":9}
+]
