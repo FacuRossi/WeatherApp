@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Wheather App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="container">
+                <div class="form-city">
+                    <h2 class="form-city-heading">Weather App</h2>
+                    <div class="input-group">
+                        <input type="city" id="inputCity" class="form-control" placeholder="City..." required autofocus>
+                        <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button" id="search"><i class="material-icons">search</i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 rounded" id="map">
+
+        </div>
+    </div>
+    <form>
+        <div class="row align-items-center" style="padding-top: 1.5em">
+            <div class="col-auto">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button  class="btn btn-primary" type="button" id="changeT">°C/°F</button>
+                    </span>
+                    <input type="text" class="form-control" id="weather-temp">
+                </div>
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" id="weather-main" placeholder="Cielo">
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" id="weather-description" placeholder="Description">
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" id="weather-hum" placeholder="Humidity">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function () {
+        searchCity();
+        changeTemp();
+    });
+
+    var city;
+    var $gradosC = null;
+    var $gradosF = null;
+    var $isCelcius = true;
+    searchCity = function () {
+        $('#search').on('click', function () {
+            this.city = $('#inputCity').val();
+            $.ajax({
+                type: "GET",
+                url: "http://api.openweathermap.org/data/2.5/weather?appid=ca147896cad69f2c6e786ee7177c9882&q=" + this.city,
+                success: function (data) {
+                    locatorCity(data.coord.lat, data.coord.lon);
+                    convertGrados(data);
+                    loadWeather(data);
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        })
+    };
+
+    changeTemp = function () {
+        $('#changeT').on('click', function () {
+            if($isCelcius){
+                $isCelcius = false;
+                $('#weather-temp').val($gradosF + ' F');
+            }else{
+                $isCelcius = true;
+                $('#weather-temp').val($gradosC + ' °C');
+            }
+        });
+    }
+
+    locatorCity = function (latitud, longitud) {
+        var cityLocator = {lat: latitud, lng: longitud};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: cityLocator
+        });
+        var marker = new google.maps.Marker({
+            position: cityLocator,
+            map: map
+        });
+    }
+
+    loadWeather = function (data) {
+        $('#weather-main').val(data.weather[0].main);
+        $('#weather-description').val(data.weather[0].description);
+        $('#weather-hum').val(data.main.humidity + ' % ');
+    }
+
+    convertGrados = function (data) {
+        $gradosF = data.main.temp;
+            $.ajax({
+            type: "GET",
+            url: "/convertToCelsius/" + $gradosF,
+            success: function (temp) {
+                $('#weather-temp').val(temp + ' °C');
+                $gradosC = temp;
+            },
+            error: function (e) {
+                console.log(e)
+            }
+        });
+    }
+
+
+    function initMap() {
+        var uluru = {lat: -25.363, lng: 131.044};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: uluru
+        });
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9msnPQit2WBsSXQLTYhp_xF2e3Y3trTg&callback=initMap">
+</script>
+</body>
+</html>
